@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app_bloc_sqflite/views/home_view.dart';
 
 void main() {
+
   runApp(const MyApp());
 }
 
