@@ -7,6 +7,7 @@ import 'package:todo_app_bloc_sqflite/views/new_tasks.dart';
 import 'package:sqlite3/open.dart';
 import 'package:sqlite3/sqlite3.dart' as sqlite_lib;
 
+import '../constants/list.dart';
 import '../widget/custom_textfield.dart';
 
 class HomePage extends StatefulWidget {
@@ -62,13 +63,17 @@ class _HomePageState extends State<HomePage> {
                     time: timeController.text,
                     date: dateController.text,
                   ).then((value) {
-                    Navigator.pop(context);
-                    setState(() {
-                      isShowBottomSheet = false;
+                    getDataFromDB(database).then((value) {
+                      Navigator.pop(context);
+                      setState(() {
+                        tasks = value;
+                        isShowBottomSheet = false;
+                        print(tasks);
+                      });
+                      titleController.clear();
+                      timeController.clear();
+                      dateController.clear();
                     });
-                    titleController.clear();
-                    timeController.clear();
-                    dateController.clear();
                   });
                 } else if (formKey.currentState?.validate() == true) {
                   print('${formKey.currentState?.validate()} 3');
@@ -77,9 +82,13 @@ class _HomePageState extends State<HomePage> {
                     time: timeController.text,
                     date: dateController.text,
                   ).then((value) {
-                    Navigator.pop(context);
-                    setState(() {
-                      isShowBottomSheet = false;
+                    getDataFromDB(database).then((value) {
+                      Navigator.pop(context);
+                      setState(() {
+                        tasks = value;
+                        isShowBottomSheet = false;
+                        print(tasks.last);
+                      });
                     });
                   });
                   titleController.clear();
@@ -149,7 +158,9 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      body: screens[currentIndex],
+      body: tasks.length == 0
+          ? Center(child: CircularProgressIndicator())
+          : screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: currentIndex,
@@ -219,6 +230,10 @@ class _HomePageState extends State<HomePage> {
       },
       onOpen: (database) {
         print('database Opened');
+        getDataFromDB(database).then((value) {
+          tasks = value;
+          setState(() {});
+        });
       },
     );
   }
@@ -239,5 +254,9 @@ class _HomePageState extends State<HomePage> {
       });
       return '';
     });
+  }
+
+  Future<List<Map>> getDataFromDB(Database database) async {
+    return await database.rawQuery('SELECT * FROM tasks');
   }
 }
