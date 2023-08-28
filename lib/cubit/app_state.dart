@@ -11,4 +11,5 @@ class InsertDB extends AppState {}
 class GetDB extends AppState {}
 class AppChangeClick extends AppState {}
 class UpdateDB extends AppState {}
+class DeletFromDB extends AppState {}
 

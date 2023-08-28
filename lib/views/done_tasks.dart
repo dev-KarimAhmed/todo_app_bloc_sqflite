@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubit/app_cubit.dart';
 import '../widget/task_tile.dart';
+import 'no_tasks.dart';
 
 class DoneTasks extends StatelessWidget {
   const DoneTasks({super.key});
@@ -14,7 +15,7 @@ class DoneTasks extends StatelessWidget {
         listener: (context,state){},
         builder: (context,state){
           var tasks = AppCubit.get(context).doneTasks;
-          return ListView.separated(
+          return tasks==0 ? NoTasksScreen(): ListView.separated(
             itemBuilder: (context, index) => TaskTile(data: tasks[index]),
             separatorBuilder: (context, index) => Container(
                   width: double.infinity,

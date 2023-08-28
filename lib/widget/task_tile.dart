@@ -9,53 +9,61 @@ class TaskTile extends StatelessWidget {
   final Map data;
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 35,
-            child: Text('${data['time']}'),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${data['title']}',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                ),
-                Text(
-                  '${data['date']}',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ],
+    return Dismissible(
+      key: Key(data['id'].toString()),
+      onDismissed: (direction) {
+        AppCubit.get(context).deleteFromDB(id: data['id']);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: 35,
+              child: Text('${data['time']}'),
             ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          IconButton(
-              onPressed: () {
-                AppCubit.get(context).updateDB(status: 'done', id: data['id']);
-              },
-              icon: Icon(
-                Icons.check_box,
-                color: Colors.green,
-              )),
-          IconButton(
-              onPressed: () {
-                AppCubit.get(context).updateDB(status: 'arcived', id: data['id']);
-              },
-              icon: Icon(
-                Icons.archive,
-                color: Colors.grey,
-              )),
-        ],
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${data['title']}',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  ),
+                  Text(
+                    '${data['date']}',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            IconButton(
+                onPressed: () {
+                  AppCubit.get(context)
+                      .updateDB(status: 'done', id: data['id']);
+                },
+                icon: Icon(
+                  Icons.check_box,
+                  color: Colors.green,
+                )),
+            IconButton(
+                onPressed: () {
+                  AppCubit.get(context)
+                      .updateDB(status: 'arcived', id: data['id']);
+                },
+                icon: Icon(
+                  Icons.archive,
+                  color: Colors.grey,
+                )),
+          ],
+        ),
       ),
     );
   }
