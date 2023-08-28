@@ -14,7 +14,7 @@ class NewTasks extends StatelessWidget {
       BlocConsumer<AppCubit,AppState>(
         listener: (context,state){},
         builder: (context,state){
-          var tasks = AppCubit.get(context).tasks;
+          var tasks = AppCubit.get(context).newTasks;
           return ListView.separated(
             itemBuilder: (context, index) => TaskTile(data: tasks[index]),
             separatorBuilder: (context, index) => Container(
