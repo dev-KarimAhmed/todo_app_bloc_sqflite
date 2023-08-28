@@ -39,7 +39,9 @@ class HomePage extends StatelessWidget {
       create: (context) => AppCubit()..createDB(),
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) {
-          // TODO: implement listener
+          if (state is InsertDB) {
+            Navigator.pop(context);
+          }
         },
         builder: (context, state) {
           return Scaffold(
@@ -56,39 +58,19 @@ class HomePage extends StatelessWidget {
                       print('${formKey.currentState?.validate()} 1');
                       if (formKey.currentState?.validate() == null) {
                         print('${formKey.currentState?.validate()} 2');
-                        // insertToDB(
-                        //   title: titleController.text,
-                        //   time: timeController.text,
-                        //   date: dateController.text,
-                        // ).then((value) {
-                        //   getDataFromDB(database).then((value) {
-                        //     Navigator.pop(context);
-                        //     // setState(() {
-                        //     //   tasks = value;
-                        //     //   isShowBottomSheet = false;
-                        //     //   print(tasks);
-                        //     // });
-                        //     titleController.clear();
-                        //     timeController.clear();
-                        //     dateController.clear();
-                        //   });
-                        // });
+                        // AppCubit.get(context).insertToDB(
+                        //     title: titleController.text,
+                        //     time: timeController.text,
+                        //     date: dateController.text);
+                        //       titleController.clear();
+                        // timeController.clear();
+                        // dateController.clear();
                       } else if (formKey.currentState?.validate() == true) {
                         print('${formKey.currentState?.validate()} 3');
-                        // insertToDB(
-                        //   title: titleController.text,
-                        //   time: timeController.text,
-                        //   date: dateController.text,
-                        // ).then((value) {
-                        //   getDataFromDB(database).then((value) {
-                        //     Navigator.pop(context);
-                        //     // setState(() {
-                        //     //   tasks = value;
-                        //     //   isShowBottomSheet = false;
-                        //     //   print(tasks.last);
-                        //     // });
-                        //   });
-                        // });
+                        AppCubit.get(context).insertToDB(
+                            title: titleController.text,
+                            time: timeController.text,
+                            date: dateController.text);
                         titleController.clear();
                         timeController.clear();
                         dateController.clear();
@@ -146,17 +128,15 @@ class HomePage extends StatelessWidget {
                             AppCubit.get(context).changeIcon(
                                 showBottomSheet: false, myIcon: Icons.edit);
                           });
-                      AppCubit.get(context).changeIcon(
-                                showBottomSheet: true, myIcon: Icons.add);
+                      AppCubit.get(context)
+                          .changeIcon(showBottomSheet: true, myIcon: Icons.add);
                     }
                   },
                   child: Icon(AppCubit.get(context).icon),
                 );
               },
             ),
-            body: false
-                ? Center(child: CircularProgressIndicator())
-                : AppCubit.get(context)
+            body: AppCubit.get(context)
                     .screens[AppCubit.get(context).currentIndex],
             bottomNavigationBar: BottomNavigationBar(
                 type: BottomNavigationBarType.fixed,

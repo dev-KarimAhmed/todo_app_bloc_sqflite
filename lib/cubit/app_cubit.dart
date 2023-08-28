@@ -51,18 +51,24 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-  Future insertToDB({
+   insertToDB({
     required String title,
     required String time,
     required String date,
   }) async {
-    return await database.transaction((txn) async {
+     await database.transaction((txn) async {
       txn
           .rawInsert(
               'INSERT INTO tasks(title,date,time,status) VALUES("$title","$date","$time","new")')
           .then((value) {
         print('Data Inserted successfuly');
         emit(InsertDB());
+        getDataFromDB(database).then((value) {
+          tasks = value;
+          print(tasks);
+          emit(GetDB());
+        });
+
       }).catchError((error) {
         print('error while inserting...${error.toString()}');
       });
