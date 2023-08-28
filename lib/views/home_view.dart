@@ -22,12 +22,10 @@ import '../widget/custom_textfield.dart';
 7. delete from DB 
 */
 class HomePage extends StatelessWidget {
-  bool isShowBottomSheet = false;
   TextEditingController titleController = TextEditingController();
   TextEditingController timeController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  late Database database;
 
   // @override
   // void initState() {
@@ -37,8 +35,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppCubit(),
+    return BlocProvider<AppCubit>(
+      create: (context) => AppCubit()..createDB(),
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) {
           // TODO: implement listener
@@ -54,43 +52,43 @@ class HomePage extends StatelessWidget {
                 return FloatingActionButton(
                   onPressed: () {
                     print(formKey.currentState?.validate());
-                    if (isShowBottomSheet) {
+                    if (AppCubit.get(context).isShowBottomSheet) {
                       print('${formKey.currentState?.validate()} 1');
                       if (formKey.currentState?.validate() == null) {
                         print('${formKey.currentState?.validate()} 2');
-                        insertToDB(
-                          title: titleController.text,
-                          time: timeController.text,
-                          date: dateController.text,
-                        ).then((value) {
-                          getDataFromDB(database).then((value) {
-                            Navigator.pop(context);
-                            // setState(() {
-                            //   tasks = value;
-                            //   isShowBottomSheet = false;
-                            //   print(tasks);
-                            // });
-                            titleController.clear();
-                            timeController.clear();
-                            dateController.clear();
-                          });
-                        });
+                        // insertToDB(
+                        //   title: titleController.text,
+                        //   time: timeController.text,
+                        //   date: dateController.text,
+                        // ).then((value) {
+                        //   getDataFromDB(database).then((value) {
+                        //     Navigator.pop(context);
+                        //     // setState(() {
+                        //     //   tasks = value;
+                        //     //   isShowBottomSheet = false;
+                        //     //   print(tasks);
+                        //     // });
+                        //     titleController.clear();
+                        //     timeController.clear();
+                        //     dateController.clear();
+                        //   });
+                        // });
                       } else if (formKey.currentState?.validate() == true) {
                         print('${formKey.currentState?.validate()} 3');
-                        insertToDB(
-                          title: titleController.text,
-                          time: timeController.text,
-                          date: dateController.text,
-                        ).then((value) {
-                          getDataFromDB(database).then((value) {
-                            Navigator.pop(context);
-                            // setState(() {
-                            //   tasks = value;
-                            //   isShowBottomSheet = false;
-                            //   print(tasks.last);
-                            // });
-                          });
-                        });
+                        // insertToDB(
+                        //   title: titleController.text,
+                        //   time: timeController.text,
+                        //   date: dateController.text,
+                        // ).then((value) {
+                        //   getDataFromDB(database).then((value) {
+                        //     Navigator.pop(context);
+                        //     // setState(() {
+                        //     //   tasks = value;
+                        //     //   isShowBottomSheet = false;
+                        //     //   print(tasks.last);
+                        //     // });
+                        //   });
+                        // });
                         titleController.clear();
                         timeController.clear();
                         dateController.clear();
@@ -145,16 +143,14 @@ class HomePage extends StatelessWidget {
                           .then((value) {
                             print(formKey.currentState?.validate());
 
-                            // setState(() {
-                            //   isShowBottomSheet = false;
-                            // });
+                            AppCubit.get(context).changeIcon(
+                                showBottomSheet: false, myIcon: Icons.edit);
                           });
-                      // setState(() {
-                      //   isShowBottomSheet = true;
-                      // });
+                      AppCubit.get(context).changeIcon(
+                                showBottomSheet: true, myIcon: Icons.add);
                     }
                   },
-                  child: Icon(isShowBottomSheet ? Icons.add : Icons.edit),
+                  child: Icon(AppCubit.get(context).icon),
                 );
               },
             ),
@@ -215,51 +211,5 @@ class HomePage extends StatelessWidget {
         print(timeController.text);
       }
     });
-  }
-
-  void createDB() async {
-    database = await openDatabase(
-      'todo.db',
-      version: 1,
-      onCreate: (Database database, int version) async {
-        print('database created');
-        //id integer but aut generated
-        //title String
-        //date String
-        //time String
-        //status String
-        await database.execute(
-            'CREATE TABLE tasks(id INTEGER PRIMARY KEY, title TEXT ,date TEXT,time TEXT,status TEXT)');
-      },
-      onOpen: (database) {
-        print('database Opened');
-        getDataFromDB(database).then((value) {
-          tasks = value;
-          // setState(() {});
-        });
-      },
-    );
-  }
-
-  Future insertToDB({
-    required String title,
-    required String time,
-    required String date,
-  }) async {
-    return await database.transaction((txn) async {
-      txn
-          .rawInsert(
-              'INSERT INTO tasks(title,date,time,status) VALUES("$title","$date","$time","new")')
-          .then((value) {
-        print('Data Inserted successfuly');
-      }).catchError((error) {
-        print('error while inserting...${error.toString()}');
-      });
-      return '';
-    });
-  }
-
-  Future<List<Map>> getDataFromDB(Database database) async {
-    return await database.rawQuery('SELECT * FROM tasks');
   }
 }

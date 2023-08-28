@@ -8,14 +8,16 @@ class NewTasks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-        itemBuilder: (context, index) => TaskTile(data: tasks[index]),
-        separatorBuilder: (context, index) => Container(
-              width: double.infinity,
-              height: 1,
-              color: Colors.grey,
-            ),
-        itemCount: tasks.length
-        );
+    return Container();
+    //   ListView.separated(
+    //       itemBuilder: (context, index) => TaskTile(data: tasks[index]),
+    //       separatorBuilder: (context, index) => Container(
+    //             width: double.infinity,
+    //             height: 1,
+    //             color: Colors.grey,
+    //           ),
+    //       itemCount: tasks.length
+    //       );
+    // }
   }
 }
