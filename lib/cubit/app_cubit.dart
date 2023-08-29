@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../constants/list.dart';
 import '../views/archived_tasks.dart';
 import '../views/done_tasks.dart';
 import '../views/new_tasks.dart';
@@ -24,7 +23,23 @@ class AppCubit extends Cubit<AppState> {
     currentIndex = index;
     emit(AppChangeBottomSheet());
   }
+  // bool isDarkMode = false;
+  // Icon iconTheme = Icon(Icons.dark_mode);
+  // void changeTheme() {
+  //   if (isDarkMode) {
+  //     iconTheme = Icon(Icons.light_mode);
+  //     isDarkMode = false;
+  //     print(isDarkMode);
 
+  //     emit(ThemeChangedToDark());
+  //   } else {
+  //     isDarkMode = true;
+  //     iconTheme = Icon(Icons.dark_mode);
+  //     print(isDarkMode);
+  //     emit(ThemeChangedToLight());
+  //   }
+  // }
+ 
   void createDB() {
     openDatabase(
       'todo.db',
@@ -102,10 +117,13 @@ class AppCubit extends Cubit<AppState> {
       emit(UpdateDB());
     });
   }
+
   void deleteFromDB({required int id}) async {
     database.rawDelete('DELETE FROM tasks WHERE id = ?', [id]).then((value) {
       getDataFromDB(database);
       emit(DeletFromDB());
     });
   }
+
+ 
 }

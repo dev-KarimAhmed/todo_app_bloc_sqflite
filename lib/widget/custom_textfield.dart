@@ -6,17 +6,19 @@ class CustomTextField extends StatelessWidget {
       required this.controller,
       this.onTap,
       this.keyboardType,
-     required  this.labelText,
-      required this.icon
-      });
+      required this.labelText,
+      required this.icon, this.readOnly});
   final TextEditingController controller;
   final void Function()? onTap;
   final TextInputType? keyboardType;
   final String labelText;
   final IconData icon;
+  final bool? readOnly;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: true,
+      readOnly: readOnly??true,
       controller: controller,
       onTap: onTap,
       keyboardType: keyboardType,
@@ -34,20 +36,3 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
-
-/**
- * //Icons.watch_later_outlined
- *  showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                              ).then((time) {
-                                if (time == null) {
-                                  return '';
-                                } else {
-                                  controller.text =
-                                      time.format(context).toString();
-                                  print(time.format(context));
-                                  print(controller.text);
-                                }
-                              });
- */

@@ -14,7 +14,7 @@ class NoTasksScreen extends StatelessWidget {
             Icon(
               Icons.menu_rounded,
               size: 56,
-              color: Colors.grey,
+              color: ThemeData == ThemeData.dark()?  Colors.white: Colors.grey,
             ),
             Text(
               'No Tasks yet, Please Add Some Tasks...',

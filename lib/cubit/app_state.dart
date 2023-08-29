@@ -12,4 +12,7 @@ class GetDB extends AppState {}
 class AppChangeClick extends AppState {}
 class UpdateDB extends AppState {}
 class DeletFromDB extends AppState {}
+//  class ThemeChangedToDark extends AppState {}
+// class ThemeChangedToLight extends AppState {}
+
 

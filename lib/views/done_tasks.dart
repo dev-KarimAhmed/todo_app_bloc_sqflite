@@ -15,7 +15,7 @@ class DoneTasks extends StatelessWidget {
         listener: (context,state){},
         builder: (context,state){
           var tasks = AppCubit.get(context).doneTasks;
-          return tasks==0 ? NoTasksScreen(): ListView.separated(
+          return tasks.length==0 ? NoTasksScreen(): ListView.separated(
             itemBuilder: (context, index) => TaskTile(data: tasks[index]),
             separatorBuilder: (context, index) => Container(
                   width: double.infinity,

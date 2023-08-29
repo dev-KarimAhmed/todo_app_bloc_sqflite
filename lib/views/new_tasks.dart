@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_app_bloc_sqflite/constants/list.dart';
 import 'package:todo_app_bloc_sqflite/cubit/app_cubit.dart';
 
 import '../widget/task_tile.dart';
